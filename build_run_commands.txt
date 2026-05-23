@@ -1,0 +1,9 @@
+rmdir /s /q build
+
+cmake -B build -S . ^
+-G "MinGW Makefiles" ^
+-DCMAKE_C_COMPILER=C:/MinGW/bin/gcc.exe ^
+-DCMAKE_CXX_COMPILER=C:/MinGW/bin/g++.exe ^
+-DCMAKE_RC_COMPILER=C:/MinGW/bin/windres.exe
+
+cmake --build build

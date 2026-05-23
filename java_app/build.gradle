@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'com.physics'
+version = '0.1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+application {
+    mainClass = 'com.physics.sim.Main'
+}
+
+// For JNI
+task copyNativeLibs(type: Copy) {
+    from "${rootProject.projectDir}/build/lib"
+    into 'build/libs/native'
+}
+
+build.dependsOn copyNativeLibs
