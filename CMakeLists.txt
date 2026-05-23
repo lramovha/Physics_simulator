@@ -23,6 +23,16 @@ include(UseJava)
 message(STATUS "Java_INCLUDE_DIRS: ${JNI_INCLUDE_DIRS}")
 message(STATUS "Java libraries ready for JNI bridge")
 
+include(FetchContent)
+
+FetchContent_Declare(
+    Catch2
+    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+    GIT_TAG v3.5.4
+)
+
+FetchContent_MakeAvailable(Catch2)
+
 # Optional: Enable testing
-# enable_testing()
-# add_subdirectory(tests)
+enable_testing()
+add_subdirectory(tests)
