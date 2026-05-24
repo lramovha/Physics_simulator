@@ -12,6 +12,6 @@ new build command
 
 cmake -B build -S . ^
 -G "MinGW Makefiles" ^
--DCMAKE_C_COMPILER=C:/MinGW/bin/gcc.exe ^
--DCMAKE_CXX_COMPILER=C:/MinGW/bin/g++.exe ^
--DCMAKE_RC_COMPILER=C:/MinGW/bin/windres.exe
+-DCMAKE_MAKE_PROGRAM=C:/msys64/ucrt64/bin/mingw32-make.exe ^
+-DCMAKE_C_COMPILER=C:/msys64/ucrt64/bin/gcc.exe ^
+-DCMAKE_CXX_COMPILER=C:/msys64/ucrt64/bin/g++.exe
