@@ -3,6 +3,8 @@ project(PhysMath C)
 add_library(physmath STATIC
     src/linear_algebra.c
     # Will add more files in later phases
+    src/vec3.c
+    src/mat3.c
 )
 
 target_include_directories(physmath PUBLIC 
@@ -11,5 +13,5 @@ target_include_directories(physmath PUBLIC
 
 # Version
 target_compile_definitions(physmath PUBLIC 
-    PHYSMATH_VERSION="0.1.0"
+    PHYSMATH_VERSION="0.2.0"
 )
