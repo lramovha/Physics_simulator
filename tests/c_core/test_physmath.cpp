@@ -9,6 +9,7 @@
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 #include "physmath/physmath.h"
 #include <iostream>
+#include <cmath>
 
 using Catch::Matchers::WithinAbs;
 
@@ -16,6 +17,7 @@ TEST_CASE("PhysMath - Version", "[physmath]") {
     REQUIRE(std::string(PHYSMATH_VERSION).length() > 0);
 }
 
+// ==================== PHASE 2: LINEAR ALGEBRA ====================
 TEST_CASE("Vec3 - Creation and Basic Operations", "[vec3]") {
     Vec3 a = vec3_create(1.0, 2.0, 3.0);
     Vec3 b = vec3_create(4.0, 5.0, 6.0);
@@ -109,4 +111,75 @@ TEST_CASE("PhysMath - Integration", "[physmath]") {
     REQUIRE(result.x == 1.0);
     REQUIRE(result.y == 2.0);
     REQUIRE(result.z == 3.0);
+}
+
+// ==================== PHASE 3: CALCULUS & ODE ====================
+
+TEST_CASE("Calculus - Numerical Differentiation", "[calculus]") {
+    auto f = [](double x, void* params) -> double {
+        return x * x;  // f(x) = x²
+    };
+
+    SECTION("Forward Difference") {
+        double df = derivative_forward(f, 3.0, NULL, 1e-5);
+        REQUIRE_THAT(df, WithinAbs(6.0, 1e-3));
+    }
+
+    SECTION("Central Difference") {
+        double df = derivative_central(f, 3.0, NULL, 1e-5);
+        REQUIRE_THAT(df, WithinAbs(6.0, 1e-6));
+    }
+}
+
+TEST_CASE("Calculus - Numerical Integration", "[calculus]") {
+    auto f = [](double x, void* params) -> double {
+        return sin(x);  // ∫sin(x) dx from 0 to π = 2
+    };
+
+    SECTION("Trapezoidal Rule") {
+        double result = trapezoidal_rule(f, 0.0, M_PI, 1000, NULL);
+        REQUIRE_THAT(result, WithinAbs(2.0, 1e-3));
+    }
+
+    SECTION("Simpson's Rule") {
+        double result = simpson_rule(f, 0.0, M_PI, 1000, NULL);
+        REQUIRE_THAT(result, WithinAbs(2.0, 1e-5));
+    }
+}
+
+TEST_CASE("ODE - RK4 Simple Integration", "[ode]") {
+    // Test: dy/dt = -y , y(0)=1  → analytical y = e^(-t)
+    auto simple_decay = [](double t, const double y[], double dydt[], void* params) {
+        dydt[0] = -y[0];
+    };
+
+    ODEState* state = ode_state_create(1);
+    state->y[0] = 1.0;
+
+    const double dt = 0.1;
+    const int steps = 20;  // t = 2.0
+
+    for (int i = 0; i < steps; i++) {
+        rk4_step(simple_decay, state, dt, NULL);
+    }
+
+    double expected = exp(-2.0);
+    REQUIRE_THAT(state->y[0], WithinAbs(expected, 1e-4));
+
+    ode_state_free(state);
+}
+
+TEST_CASE("ODE - State Management", "[ode]") {
+    ODEState* s1 = ode_state_create(2);
+    s1->y[0] = 10.0;
+    s1->y[1] = 20.0;
+
+    ODEState* s2 = ode_state_create(2);
+    ode_state_copy(s2, s1);
+
+    REQUIRE(s2->y[0] == 10.0);
+    REQUIRE(s2->y[1] == 20.0);
+
+    ode_state_free(s1);
+    ode_state_free(s2);
 }
