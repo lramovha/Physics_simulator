@@ -5,6 +5,9 @@ add_library(physmath STATIC
     # Will add more files in later phases
     src/vec3.c
     src/mat3.c
+    include/physmath/calculus.h
+    src/calculus.c
+    src/ode.c
 )
 
 target_include_directories(physmath PUBLIC 

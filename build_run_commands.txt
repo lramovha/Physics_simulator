@@ -1,17 +1,23 @@
-rmdir /s /q build
+cd /c/Users/lasyr/Desktop/ZaLes/School/2026/programming_projects/Physics_simulator
 
-cmake -B build -S . ^
--G "MinGW Makefiles" ^
--DCMAKE_C_COMPILER=C:/MinGW/bin/gcc.exe ^
--DCMAKE_CXX_COMPILER=C:/MinGW/bin/g++.exe ^
--DCMAKE_RC_COMPILER=C:/MinGW/bin/windres.exe
+rm -rf build
 
-cmake --build build
+cmake -B build -S . -G "MinGW Makefiles" \
+  -DCMAKE_MAKE_PROGRAM=/ucrt64/bin/mingw32-make.exe \
+  -DCMAKE_C_COMPILER=/ucrt64/bin/gcc.exe \
+  -DCMAKE_CXX_COMPILER=/ucrt64/bin/g++.exe \
+  -DCMAKE_BUILD_TYPE=Release
 
-new build command
+cmake --build build --config Release -j4
 
-cmake -B build -S . ^
--G "MinGW Makefiles" ^
--DCMAKE_MAKE_PROGRAM=C:/msys64/ucrt64/bin/mingw32-make.exe ^
--DCMAKE_C_COMPILER=C:/msys64/ucrt64/bin/gcc.exe ^
--DCMAKE_CXX_COMPILER=C:/msys64/ucrt64/bin/g++.exe
+# Run the tests
+./build/bin/test_physmath
+
+
+# alternative build command
+
+cmake -B build -S . -G "MinGW Makefiles"   
+-DCMAKE_MAKE_PROGRAM=/ucrt64/bin/mingw32-make.exe   
+-DCMAKE_C_COMPILER=/ucrt64/bin/gcc.exe   
+-DCMAKE_CXX_COMPILER=/ucrt64/bin/g++.exe   
+-DCMAKE_BUILD_TYPE=Release

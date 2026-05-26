@@ -13,6 +13,10 @@ void physmath_hello(void);
 #include "vec3.h"
 #include "mat3.h"
 
+// Calculus & ODE
+#include "calculus.h"
+#include "ode.h"
+
 #ifdef __cplusplus
 }
 #endif
