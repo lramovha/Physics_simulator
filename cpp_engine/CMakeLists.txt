@@ -3,8 +3,12 @@ project(PhysEngine CXX)
 add_library(physengine STATIC
     src/PhysicsWorld.cpp
     src/RigidBody.cpp
-    include/physengine/integrators/RK4Integrator.hpp
+    # include/physengine/integrators/RK4Integrator.hpp
     src/integrators/RK4Integrator.cpp
+    # include/physengine/scenes/BaseScene.hpp
+    src/scenes/BaseScene.cpp
+    # include/physengine/scenes/FallingBallsScene.hpp
+    src/scenes/FallingBallsScene.cpp
     # More files will be added later
 )
 
