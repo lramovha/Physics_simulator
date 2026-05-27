@@ -1,9 +1,5 @@
-# add_subdirectory(c_core)
-# add_subdirectory(cpp_engine)
-
 project(PhysicsSim_Tests)
 
-# Download Catch2 (if not installed)
 include(FetchContent)
 FetchContent_Declare(
     Catch2
@@ -13,7 +9,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(Catch2)
 
-# C Core Tests
+# ====================== C CORE TESTS ======================
 add_executable(test_physmath
     c_core/test_physmath.cpp
 )
@@ -27,9 +23,24 @@ target_include_directories(test_physmath PRIVATE
     ${CMAKE_SOURCE_DIR}/c_core/include
 )
 
-add_test(NAME TestPhysMath COMMAND test_physmath)
-
-# Output test executable to bin/
 set_target_properties(test_physmath PROPERTIES 
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+)
+
+# ====================== C++ ENGINE TESTS ======================
+add_executable(physengine_test
+    cpp_engine/test_physics_world.cpp
+)
+
+target_link_libraries(physengine_test PRIVATE 
+    physengine      # ← Correct library name
+)
+
+target_include_directories(physengine_test PRIVATE 
+    ${CMAKE_SOURCE_DIR}/cpp_engine/include
+    ${CMAKE_SOURCE_DIR}/c_core/include
+)
+
+set_target_properties(physengine_test PROPERTIES 
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
 )

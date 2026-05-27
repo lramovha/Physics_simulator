@@ -12,6 +12,7 @@ cmake --build build --config Release -j4
 
 # Run the tests
 ./build/bin/test_physmath
+./build/bin/physengine_test
 
 
 # alternative build command

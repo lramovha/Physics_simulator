@@ -1,7 +1,8 @@
 project(PhysEngine CXX)
 
 add_library(physengine STATIC
-    src/PhysicsWorld.cpp
+    # src/PhysicsWorld.cpp
+    src/RigidBody.cpp
     # More files will be added later
 )
 
@@ -13,5 +14,5 @@ target_include_directories(physengine PUBLIC
 target_link_libraries(physengine PUBLIC physmath)
 
 target_compile_definitions(physengine PUBLIC 
-    PHYSENGINE_VERSION="0.1.0"
+    PHYSENGINE_VERSION="0.4.0"
 )

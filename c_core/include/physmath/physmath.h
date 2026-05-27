@@ -1,7 +1,10 @@
 #ifndef PHYSMATH_H
 #define PHYSMATH_H
 
-#define PHYSMATH_VERSION "0.2.0"
+// Version - Guarded to prevent redefinition warnings
+#ifndef PHYSMATH_VERSION
+#define PHYSMATH_VERSION "0.5.0"
+#endif
 
 #ifdef __cplusplus
 extern "C" {

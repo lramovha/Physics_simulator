@@ -1,5 +1,7 @@
-add_executable(cpp_engine_tests
-    test_physics_world.cpp
+add_library(physengine STATIC
+    src/RigidBody.cpp
+    src/integrators/RK4Integrator.cpp
+    src/PhysicsWorld.cpp
 )
 
 target_link_libraries(cpp_engine_tests
