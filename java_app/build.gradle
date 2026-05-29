@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'com.physics'
-version = '0.1.0'
+version = '0.7.0'
 
 repositories {
     mavenCentral()
@@ -24,10 +24,16 @@ application {
     mainClass = 'com.physics.sim.Main'
 }
 
+application {
+    mainClass = 'com.physics.sim.TestJNI'
+}
+
 // For JNI
 task copyNativeLibs(type: Copy) {
     from "${rootProject.projectDir}/build/lib"
     into 'build/libs/native'
+
+    include "*.dll", "*.so", "*.dylib"
 }
 
 build.dependsOn copyNativeLibs

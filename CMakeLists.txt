@@ -36,3 +36,27 @@ FetchContent_MakeAvailable(Catch2)
 # Optional: Enable testing
 enable_testing()
 add_subdirectory(tests)
+
+
+# ==================== JNI LIBRARY (Windows Fix) ====================
+add_library(physengine_jni SHARED
+    cpp_engine/jni/PhysicsJNI.cpp
+)
+
+target_include_directories(physengine_jni PRIVATE
+    ${JNI_INCLUDE_DIRS}
+    ${CMAKE_SOURCE_DIR}/cpp_engine/include
+    ${CMAKE_SOURCE_DIR}/c_core/include
+)
+
+target_link_libraries(physengine_jni PRIVATE physengine)
+
+# Strong Windows DLL settings
+set_target_properties(physengine_jni PROPERTIES 
+    OUTPUT_NAME "physengine"
+    PREFIX ""
+    SUFFIX ".dll"
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+)

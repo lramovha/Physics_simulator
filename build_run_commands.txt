@@ -18,6 +18,14 @@ cmake --build build --config Release -j4
 ./build/bin/main_demo
 
 
+#JNI(java_app) test and run commands
+"C:/Program Files/Java/jdk-23/bin/java" \
+  -Djava.library.path=../build/lib \
+  -cp build/classes \
+  com.physics.sim.TestJNI
+
+
+
 
 
 
