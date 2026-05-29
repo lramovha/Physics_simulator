@@ -18,7 +18,7 @@ typedef void (*ODEFunc)(double t, const double y[], double dydt[], void* params)
 // RK4 Step
 int rk4_step(ODEFunc f, ODEState* state, double dt, void* params);
 
-// Helper to create state
+// Helper funtions to create state
 ODEState* ode_state_create(int dim);
 void ode_state_free(ODEState* state);
 void ode_state_copy(ODEState* dest, const ODEState* src);
