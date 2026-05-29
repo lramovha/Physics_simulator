@@ -11,6 +11,11 @@ repositories {
 }
 
 dependencies {
+    // JavaFX
+    implementation 'org.openjfx:javafx-controls:21'
+    implementation 'org.openjfx:javafx-fxml:21'
+    implementation 'org.openjfx:javafx-graphics:21'
+
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
 }
 
@@ -20,12 +25,16 @@ java {
     }
 }
 
-application {
-    mainClass = 'com.physics.sim.Main'
-}
+// application {
+//     mainClass = 'com.physics.sim.Main'
+// }
+
+// application {
+//     mainClass = 'com.physics.sim.TestJNI'
+// }
 
 application {
-    mainClass = 'com.physics.sim.TestJNI'
+    mainClass = 'com.physics.sim.MainApp'
 }
 
 // For JNI

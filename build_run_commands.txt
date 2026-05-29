@@ -17,12 +17,25 @@ cmake --build build --config Release -j4
 # Scene test demo
 ./build/bin/main_demo
 
+# Clean previous classes (java_app)
+rm -rf build/classes
+
+# Compile with JavaFX (java_app)
+"/c/Program Files/Java/jdk-26.0.1/bin/javac.exe" \  
+  --module-path javafx-sdk-26.0.1/lib \  
+  --add-modules javafx.controls,javafx.graphics \   
+  -d build/classes \   
+  src/main/java/com/physics/sim/*.java \   
+  src/main/java/com/physics/sim/nativebridge/*.java
+
 
 #JNI(java_app) test and run commands
-"C:/Program Files/Java/jdk-23/bin/java" \
+"/c/Program Files/Java/jdk-26.0.1/bin/java.exe" \
+  --module-path javafx-sdk-26.0.1/lib \
+  --add-modules javafx.controls,javafx.graphics \
   -Djava.library.path=../build/lib \
   -cp build/classes \
-  com.physics.sim.TestJNI
+  com.physics.sim.MainApp
 
 
 

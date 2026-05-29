@@ -8,3 +8,5 @@ build/
 cmake-build-*
 .vscode/
 .idea/
+java_app/build/
+java_app/javafx-sdk-*/
