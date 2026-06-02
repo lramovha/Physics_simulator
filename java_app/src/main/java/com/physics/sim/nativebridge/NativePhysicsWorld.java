@@ -53,6 +53,12 @@ public class NativePhysicsWorld {
      */
     public native double[] getPendulumState();
 
+    /**
+    * Returns 10 doubles for Double Pendulum:
+    * [pivotX, pivotY, bob1X, bob1Y, bob2X, bob2Y, theta1, omega1, theta2, omega2]
+    */
+    public native double[] getDoublePendulumState();
+
     // ── World boundary ───────────────────────────────────────────
 
     /**

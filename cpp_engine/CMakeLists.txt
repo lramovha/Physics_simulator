@@ -12,6 +12,7 @@ add_library(physengine STATIC
     src/scenes/ProjectileScene.cpp
     src/scenes/PendulumScene.cpp
     src/scenes/BouncingBallsScene.cpp
+    src/scenes/DoublePendulumScene.cpp
     # More files will be added later
 )
 

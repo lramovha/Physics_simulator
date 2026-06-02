@@ -5,6 +5,7 @@
 #include "physengine/scenes/ProjectileScene.hpp"
 #include "physengine/scenes/BouncingBallsScene.hpp"
 #include "physengine/scenes/PendulumScene.hpp"
+#include "physengine/scenes/DoublePendulumScene.hpp"
 
 /* ─────────────────────────────────────────────────────────────────
  * Global scene pointer
@@ -34,6 +35,7 @@ Java_com_physics_sim_nativebridge_NativePhysicsWorld_createScene
         case 1:  currentScene = new ProjectileScene();    break;
         case 2:  currentScene = new BouncingBallsScene(); break;
         case 3:  currentScene = new PendulumScene();      break;
+        case 4: currentScene = new DoublePendulumScene(); break;    // DoublePendelum Scene
         default: currentScene = new FallingBallsScene();  break;
     }
     currentScene->init();
@@ -121,6 +123,33 @@ Java_com_physics_sim_nativebridge_NativePhysicsWorld_getPendulumState
     env->SetDoubleArrayRegion(result, 0, 6, data);
     return result;
 }
+
+// Native method for the DoublePandulumState
+JNIEXPORT jdoubleArray JNICALL
+Java_com_physics_sim_nativebridge_NativePhysicsWorld_getDoublePendulumState
+(JNIEnv* env, jobject /*obj*/)
+{
+    jdoubleArray result = env->NewDoubleArray(10);  // pivot + bob1 + bob2 + 4 states
+    if (!result) return nullptr;
+
+    DoublePendulumScene* dp = dynamic_cast<DoublePendulumScene*>(currentScene);
+    if (!dp) {
+        jdouble zeros[10] = {0};
+        env->SetDoubleArrayRegion(result, 0, 10, zeros);
+        return result;
+    }
+
+    jdouble data[10] = {
+        dp->pivotX, dp->pivotY,
+        dp->getBob1X(), dp->getBob1Y(),
+        dp->getBob2X(), dp->getBob2Y(),
+        dp->theta1, dp->omega1,
+        dp->theta2, dp->omega2
+    };
+    env->SetDoubleArrayRegion(result, 0, 10, data);
+    return result;
+}
+
 
 /* ── getWorldBounds ──────────────────────────────────────────────
  * Returns 6 doubles: [minX, maxX, minY, maxY, minZ, maxZ]
