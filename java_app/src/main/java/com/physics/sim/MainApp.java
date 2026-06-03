@@ -246,7 +246,7 @@ public class MainApp extends Application {
 
     private void renderDoublePendulum(GraphicsContext gc) {
         double[] ps = nativeWorld.getDoublePendulumState();
-        if (ps == null) return;
+        if (ps == null || ps.length < 10) return;
 
         double pivPx = worldToPixelX(ps[0]);
         double pivPy = worldToPixelY(ps[1]);
@@ -255,35 +255,35 @@ public class MainApp extends Application {
         double b2Px  = worldToPixelX(ps[4]);
         double b2Py  = worldToPixelY(ps[5]);
 
-        // Upper arm (rod 1)
-        gc.setStroke(Color.color(0.75, 0.78, 0.85));
-        gc.setLineWidth(4.0);
+        // Upper rod
+        gc.setStroke(Color.rgb(180, 180, 220));
+        gc.setLineWidth(5.0);
         gc.strokeLine(pivPx, pivPy, b1Px, b1Py);
 
-        // Lower arm (rod 2)
-        gc.setLineWidth(3.5);
+        // Lower rod
+        gc.setStroke(Color.rgb(160, 200, 240));
+        gc.setLineWidth(4.0);
         gc.strokeLine(b1Px, b1Py, b2Px, b2Py);
 
-        // Bob 1
-        gc.setFill(Color.color(0.9, 0.6, 0.2));
-        gc.fillOval(b1Px - 12, b1Py - 12, 24, 24);
+        // Bob 1 (upper)
+        gc.setFill(Color.rgb(240, 160, 80));
+        gc.fillOval(b1Px - 13, b1Py - 13, 26, 26);
 
-        // Bob 2 (slightly smaller, different color)
-        gc.setFill(Color.color(0.2, 0.7, 0.9));
-        gc.fillOval(b2Px - 11, b2Py - 11, 22, 22);
+        // Bob 2 (lower)
+        gc.setFill(Color.rgb(80, 180, 240));
+        gc.fillOval(b2Px - 12, b2Py - 12, 24, 24);
 
         // Pivot
         gc.setFill(Color.WHITE);
-        gc.fillOval(pivPx - 6, pivPy - 6, 12, 12);
+        gc.fillOval(pivPx - 7, pivPy - 7, 14, 14);
 
-        // Status text
-        gc.setFill(Color.color(0.75, 0.85, 1.0));
-        gc.fillText(String.format("θ1 = %.1f°  ω1 = %.2f", 
-                    Math.toDegrees(ps[6]), ps[7]), 
-                    worldToPixelX(6), worldToPixelY(7));
-        gc.fillText(String.format("θ2 = %.1f°  ω2 = %.2f", 
-                    Math.toDegrees(ps[8]), ps[9]), 
-                    worldToPixelX(6), worldToPixelY(5.5));
+        // Info text
+        gc.setFill(Color.WHITE);
+        gc.setFont(javafx.scene.text.Font.font(12));
+        gc.fillText(String.format("θ1: %.1f°  ω1: %.2f", Math.toDegrees(ps[6]), ps[7]), 
+                    worldToPixelX(-12), worldToPixelY(12));
+        gc.fillText(String.format("θ2: %.1f°  ω2: %.2f", Math.toDegrees(ps[8]), ps[9]), 
+                    worldToPixelX(-12), worldToPixelY(10));
     }
 
 
