@@ -26,6 +26,7 @@ void PhysicsWorld::step() {
     }
 
     /* 4. Reflect bodies that escaped the world boundary */
+    resolveCollisions();     // ← Collisions
     applyBoundaries();
 
     time += dt;
@@ -43,17 +44,12 @@ void PhysicsWorld::clear() {
 }
 
 void PhysicsWorld::printStatus() const {
-    std::cout << "=== PhysicsWorld t=" << time
-              << "s | bodies=" << bodies.size() << " ===\n";
+    std::cout << "=== PhysicsWorld t=" << time << "s | bodies=" << bodies.size() << " ===\n";
     for (size_t i = 0; i < bodies.size(); ++i) {
         const auto& b = bodies[i];
-        std::cout << "  Body " << i
-                  << "  pos(" << b->position.x() << ", "
-                              << b->position.y() << ", "
-                              << b->position.z() << ")"
-                  << "  vel(" << b->velocity.x() << ", "
-                              << b->velocity.y() << ", "
-                              << b->velocity.z() << ")\n";
+        std::cout << "  Body " << i 
+                  << " pos(" << b->position.x() << ", " << b->position.y() << ", " << b->position.z() << ")"
+                  << " vel(" << b->velocity.x() << ", " << b->velocity.y() << ", " << b->velocity.z() << ")\n";
     }
 }
 
@@ -92,7 +88,7 @@ void PhysicsWorld::applyBoundaries() {
             body->velocity.v.y  = -std::abs(body->velocity.v.y) * body->restitution;
         }
 
-        /* ── Z axis (only matters if you go 3-D) ── */
+        /* ── Z axis (only matters when going 3-D) ── */
         if (body->position.v.z - r < bounds.minZ) {
             body->position.v.z  = bounds.minZ + r;
             body->velocity.v.z  =  std::abs(body->velocity.v.z) * body->restitution;
@@ -103,48 +99,47 @@ void PhysicsWorld::applyBoundaries() {
     }
 }
 
-// #include "physengine/PhysicsWorld.hpp"
-// #include "physengine/integrators/RK4Integrator.hpp"
-// #include <iostream>
+// ==================== COLLISION DETECTION ====================
+void PhysicsWorld::resolveCollisions() {
+    const size_t n = bodies.size();
+    
+    for (size_t i = 0; i < n; ++i) {
+        for (size_t j = i + 1; j < n; ++j) {        // This is fine, but let's be extra safe
+            auto& a = bodies[i];
+            auto& b = bodies[j];
 
-// void PhysicsWorld::addBody(std::unique_ptr<RigidBody> body) {
-//     bodies.push_back(std::move(body));
-// }
+            if (a->isStatic && b->isStatic) continue;
 
-// void PhysicsWorld::step() {
-//     for (auto& body : bodies) {
-//         body->clearForces();
-//         if (!body->isStatic) {
-//             body->applyForce(Vector3(0, -9.81 * body->mass, 0));
-//         }
-//     }
+            Vector3 delta = a->position - b->position;
+            double distSq = delta.dot(delta);
+            double minDist = a->radius + b->radius;
 
-//     for (auto& body : bodies) {
-//         RK4Integrator::integrate(*body, dt);
-//     }
+            if (distSq >= minDist * minDist || distSq < 1e-12) continue;
 
-//     time += dt;
-// }
+            double dist = std::sqrt(distSq);
+            Vector3 normal = delta * (1.0 / dist);
 
-// void PhysicsWorld::step(int numSteps) {
-//     for (int i = 0; i < numSteps; i++) {
-//         step();
-//     }
-// }
+            // Position correction
+            double overlap = minDist - dist;
+            Vector3 correction = normal * (overlap * 0.5);
 
-// void PhysicsWorld::clear() {
-//     bodies.clear();
-//     time = 0.0;
-// }
+            if (!a->isStatic) a->position = a->position + correction;
+            if (!b->isStatic) b->position = b->position - correction;
 
-// void PhysicsWorld::printStatus() const {
-//     std::cout << "=== PhysicsWorld Status ===\n";
-//     std::cout << "Time: " << time << " s | Bodies: " << bodies.size() << "\n";
-//     for (size_t i = 0; i < bodies.size(); ++i) {
-//         const auto& b = bodies[i];
-//         std::cout << "Body " << i 
-//                   << ": pos(" << b->position.x() << ", " << b->position.y() << ", " << b->position.z() 
-//                   << ") vel(" << b->velocity.x() << ", " << b->velocity.y() << ", " << b->velocity.z() 
-//                   << ")\n";
-//     }
-// }
+            // Velocity resolution
+            Vector3 relVel = a->velocity - b->velocity;
+            double velAlongNormal = relVel.dot(normal);
+
+            if (velAlongNormal > 0) continue; // separating
+
+            double e = std::min(a->restitution, b->restitution);
+            double impulseScalar = -(1.0 + e) * velAlongNormal;
+            impulseScalar /= (1.0 / a->mass + 1.0 / b->mass);
+
+            Vector3 impulse = normal * impulseScalar;
+
+            if (!a->isStatic) a->velocity = a->velocity + impulse * (1.0 / a->mass);
+            if (!b->isStatic) b->velocity = b->velocity - impulse * (1.0 / b->mass);
+        }
+    }
+}

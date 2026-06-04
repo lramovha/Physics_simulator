@@ -170,28 +170,41 @@ public class MainApp extends Application {
             double px = worldToPixelX(wx);
             double py = worldToPixelY(wy);
 
-            if (i == 0) {
-                // First body is always the static ground/floor — draw as a bar
-                gc.setFill(Color.color(0.50, 0.55, 0.70, 0.5));
-                gc.fillRect(px - 200, py - 4, 400, 8);
-            } else {
-                // Dynamic balls — colour shifts from cyan (fast) to blue (slow)
-                double speed = Math.sqrt(
-                    positions[i*3]*positions[i*3] +
-                    positions[i*3+1]*positions[i*3+1]);
-                double t = Math.min(speed / 20.0, 1.0);
-                Color ballColor = Color.color(
-                    0.1 + t * 0.3,
-                    0.7 - t * 0.4,
-                    1.0
-                );
-                gc.setFill(ballColor);
-                gc.fillOval(px - 8, py - 8, 16, 16);
+            // Skip rendering static ground bodies (they create the big box)
+            if (i == 0 && activeScene != 3 && activeScene != 4) continue;
 
-                // Subtle highlight
-                gc.setFill(Color.color(1, 1, 1, 0.25));
-                gc.fillOval(px - 5, py - 7, 5, 5);
-            }
+            // Draw dynamic balls
+            double speed = Math.sqrt(
+                positions[i*3]*positions[i*3] + 
+                positions[i*3+1]*positions[i*3+1]);
+            double t = Math.min(speed / 20.0, 1.0);
+            Color ballColor = Color.color(0.1 + t * 0.3, 0.7 - t * 0.4, 1.0);
+
+            gc.setFill(ballColor);
+            gc.fillOval(px - 8, py - 8, 16, 16);
+
+            // if (i == 0) {
+            //     // First body is always the static ground/floor — draw as a bar
+            //     gc.setFill(Color.color(0.50, 0.55, 0.70, 0.5));
+            //     gc.fillRect(px - 200, py - 4, 400, 8);
+            // } else {
+            //     // Dynamic balls — colour shifts from cyan (fast) to blue (slow)
+            //     double speed = Math.sqrt(
+            //         positions[i*3]*positions[i*3] +
+            //         positions[i*3+1]*positions[i*3+1]);
+            //     double t = Math.min(speed / 20.0, 1.0);
+            //     Color ballColor = Color.color(
+            //         0.1 + t * 0.3,
+            //         0.7 - t * 0.4,
+            //         1.0
+            //     );
+            //     gc.setFill(ballColor);
+            //     gc.fillOval(px - 8, py - 8, 16, 16);
+
+            //     // Subtle highlight
+            //     gc.setFill(Color.color(1, 1, 1, 0.25));
+            //     gc.fillOval(px - 5, py - 7, 5, 5);
+            // }
         }
     }
 

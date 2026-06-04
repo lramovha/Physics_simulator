@@ -2,27 +2,38 @@
 #include "physengine/scenes/ProjectileScene.hpp"
 #include "physengine/scenes/PendulumScene.hpp"
 #include "physengine/scenes/BouncingBallsScene.hpp"
+#include "physengine/scenes/DoublePendulumScene.hpp"
 #include <iostream>
 
 int main() {
-    std::cout << "=== Physics Simulator - Phase 6 (Scenes) ===\n\n";
+    std::cout << "=== Physics Simulator - Collision Test Demo ===\n\n";
 
-    // Choose a scene to run:
+    // Choose which scene to run:
     // FallingBallsScene scene;
     // ProjectileScene scene;
-    PendulumScene scene;
-    // BouncingBallsScene scene;
+    // PendulumScene scene;
+    BouncingBallsScene scene;        // ← Best for testing collisions
+    // DoublePendulumScene scene;
 
     scene.init();
-    std::cout << "Running: " << scene.getName() << "\n\n";
+    std::cout << "Running: " << scene.getName() << "\n";
+    std::cout << "Bodies: " << scene.world.bodies.size() << "\n\n";
 
-    for (int i = 0; i < 500; i++) {
+    std::cout << "Simulating 800 steps...\n";
+    std::cout << "Watch for ball-to-ball collisions!\n\n";
+
+    for (int i = 0; i < 800; i++) {
         scene.update();
-        if (i % 60 == 0) {
+
+        // Print status every 80 steps
+        if (i % 80 == 0 || i == 799) {
+            std::cout << "[Step " << i << "] ";
             scene.world.printStatus();
         }
     }
 
     std::cout << "\n=== Demo Finished ===\n";
+    std::cout << "Tip: Try changing to FallingBallsScene or BouncingBallsScene to see collisions.\n";
+    
     return 0;
 }
