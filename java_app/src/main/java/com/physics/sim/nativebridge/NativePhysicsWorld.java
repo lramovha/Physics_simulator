@@ -67,6 +67,9 @@ public class NativePhysicsWorld {
      * Returns all zeroes if no scene is active or bounds are disabled.
      */
     public native double[] getWorldBounds();
+
+    // NEW: Add a random dynamic ball
+    public native void addRandomBall();
 }
 
 

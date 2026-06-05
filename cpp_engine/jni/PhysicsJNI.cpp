@@ -175,6 +175,34 @@ Java_com_physics_sim_nativebridge_NativePhysicsWorld_getWorldBounds
     return result;
 }
 
+// Add Random balls to the siulation
+JNIEXPORT void JNICALL
+Java_com_physics_sim_nativebridge_NativePhysicsWorld_addRandomBall
+(JNIEnv* /*env*/, jobject /*obj*/)
+{
+    if (!currentScene) return;
+
+    // Only add balls to scenes that use RigidBody system
+    if (dynamic_cast<PendulumScene*>(currentScene) || 
+        dynamic_cast<DoublePendulumScene*>(currentScene)) {
+        return; // Don't add balls to pendulum scenes
+    }
+
+    // Generate random position and velocity
+    double x = (rand() % 20) - 10.0;           // -10 to +10
+    double y = 8.0 + (rand() % 12);            // 8 to 20
+    double vx = (rand() % 11) - 5.0;           // -5 to +5
+    double vy = (rand() % 8) - 2.0;            // -2 to +6
+
+    auto newBall = std::make_unique<RigidBody>(1.0, Vector3(x, y, 0));
+    newBall->isStatic = false;
+    newBall->radius = 0.5;
+    newBall->restitution = 0.75 + (rand() % 20) / 100.0; // 0.75 to 0.95
+    newBall->velocity = Vector3(vx, vy, 0);
+
+    currentScene->world.addBody(std::move(newBall));
+}
+
 } /* extern "C" */
 
 

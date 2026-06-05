@@ -17,6 +17,10 @@ void PhysicsWorld::step() {
     for (auto& body : bodies) {
         if (!body->isStatic) {
             body->applyForce(Vector3(0, -9.81 * body->mass, 0));
+
+            // Air resistance (damping)
+            Vector3 drag = body->velocity * -0.1;   // ← Adjustable damping
+            body->applyForce(drag);
         }
     }
 
