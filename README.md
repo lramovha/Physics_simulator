@@ -14,24 +14,24 @@ Most "physics simulation" student projects either lean entirely on a game engine
 ## Architecture
 
 ```
-┌─────────────────────────┐
+┌───────────────────────── ┐
 │   Java / JavaFX GUI      │  MainApp.java — canvas rendering, scene selector,
 │   (java_app/)            │  gravity slider, live ball spawning, motion trails
 └────────────┬─────────────┘
              │ JNI calls (NativePhysicsWorld.java)
 ┌────────────┴─────────────┐
-│   JNI Bridge              │  PhysicsJNI.cpp — exposes createScene(), step(),
-│   (cpp_engine/jni/)        │  getBodyPositions(), getPendulumState(), etc.
+│   JNI Bridge             │  PhysicsJNI.cpp — exposes createScene(), step(),
+│   (cpp_engine/jni/)      │  getBodyPositions(), getPendulumState(), etc.
 └────────────┬─────────────┘
 ┌────────────┴─────────────┐
-│   C++ Physics Engine      │  PhysicsWorld, RigidBody, RK4Integrator,
-│   (cpp_engine/)            │  5 Scene classes (Falling Balls, Projectile,
-│                            │  Bouncing Balls, Pendulum, Double Pendulum)
+│   C++ Physics Engine     │  PhysicsWorld, RigidBody, RK4Integrator,
+│   (cpp_engine/)          │  5 Scene classes (Falling Balls, Projectile,
+│                          │  Bouncing Balls, Pendulum, Double Pendulum)
 └────────────┬─────────────┘
 ┌────────────┴─────────────┐
-│   C Math Core             │  Vec3, Mat3, calculus helpers, and a generic
-│   (c_core/)                │  rk4_step() ODE solver used by every scene
-└───────────────────────────┘
+│   C Math Core            │  Vec3, Mat3, calculus helpers, and a generic
+│   (c_core/)              │  rk4_step() ODE solver used by every scene
+└──────────────────────────┘
 ```
 
 ## Scenes
