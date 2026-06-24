@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 3.16)
 project(PhysicsSim VERSION 0.4.0 LANGUAGES C CXX)
 
+# Enable OpenMP
+find_package(OpenMP REQUIRED)
+if(OpenMP_CXX_FOUND)
+    message(STATUS "OpenMP found - Parallelism enabled")
+endif()
+
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

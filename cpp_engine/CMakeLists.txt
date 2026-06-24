@@ -23,6 +23,8 @@ target_include_directories(physengine PUBLIC
 
 target_link_libraries(physengine PUBLIC physmath)
 
+target_link_libraries(physengine PUBLIC physmath OpenMP::OpenMP_CXX)
+
 target_compile_definitions(physengine PUBLIC 
     PHYSENGINE_VERSION="0.6.0"
 )

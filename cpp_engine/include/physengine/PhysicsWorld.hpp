@@ -10,6 +10,7 @@
 #include <vector>
 #include <memory>
 #include <iostream>
+#include "SpatialHash.hpp"   
 
 /* ─────────────────────────────────────────────────────────────────
  * WorldBounds
@@ -56,6 +57,8 @@ private:
     /* Reflect any body that has crossed the world boundary */
     void applyBoundaries();
     void resolveCollisions();   // to handle rigid body collisions
+
+    SpatialHash spatialHash;
 };
 
 #endif /* PHYSICS_WORLD_HPP */

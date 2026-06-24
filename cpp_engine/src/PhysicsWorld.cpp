@@ -2,6 +2,7 @@
 #include "physengine/integrators/RK4Integrator.hpp"
 #include <iostream>
 #include <cmath>
+#include <omp.h>    // openMP to impliment parallelism
 
 void PhysicsWorld::addBody(std::unique_ptr<RigidBody> body) {
     bodies.push_back(std::move(body));
@@ -12,25 +13,36 @@ void PhysicsWorld::setGravity(double g) {
 }
 
 void PhysicsWorld::step() {
+    const size_t n = bodies.size();
     /* 1. Clear accumulated forces from last tick */
     for (auto& body : bodies) {
         body->clearForces();
     }
 
     /* 2. Apply gravity to every non-static body */
-    for (auto& body : bodies) {
+    // Clear forces + Apply gravity + Drag (Parallel)
+    #pragma omp parallel for
+    for (size_t i = 0; i < n; ++i) {
+        auto& body = bodies[i];
+        body->clearForces();
+
         if (!body->isStatic) {
+            // Gravity
             body->applyForce(Vector3(0, -gravity * body->mass, 0));
 
-            // Air resistance (damping)
-            Vector3 drag = body->velocity * -0.1;   // ← Adjustable damping
+            // Air resistance / damping
+            Vector3 drag = body->velocity * -0.08;
             body->applyForce(drag);
         }
     }
 
     /* 3. Integrate all bodies one timestep */
-    for (auto& body : bodies) {
-        RK4Integrator::integrate(*body, dt);
+    // Integration (Parallel)
+    #pragma omp parallel for
+    for (size_t i = 0; i < n; ++i) {
+        if (!bodies[i]->isStatic) {
+            RK4Integrator::integrate(*bodies[i], dt);
+        }
     }
 
     /* 4. Reflect bodies that escaped the world boundary */
@@ -109,45 +121,56 @@ void PhysicsWorld::applyBoundaries() {
 
 // ==================== COLLISION DETECTION ====================
 void PhysicsWorld::resolveCollisions() {
-    const size_t n = bodies.size();
-    
-    for (size_t i = 0; i < n; ++i) {
-        for (size_t j = i + 1; j < n; ++j) {        // This is fine, but let's be extra safe
-            auto& a = bodies[i];
-            auto& b = bodies[j];
+    spatialHash.clear();
 
-            if (a->isStatic && b->isStatic) continue;
-
-            Vector3 delta = a->position - b->position;
-            double distSq = delta.dot(delta);
-            double minDist = a->radius + b->radius;
-
-            if (distSq >= minDist * minDist || distSq < 1e-12) continue;
-
-            double dist = std::sqrt(distSq);
-            Vector3 normal = delta * (1.0 / dist);
-
-            // Position correction
-            double overlap = minDist - dist;
-            Vector3 correction = normal * (overlap * 0.5);
-
-            if (!a->isStatic) a->position = a->position + correction;
-            if (!b->isStatic) b->position = b->position - correction;
-
-            // Velocity resolution
-            Vector3 relVel = a->velocity - b->velocity;
-            double velAlongNormal = relVel.dot(normal);
-
-            if (velAlongNormal > 0) continue; // separating
-
-            double e = std::min(a->restitution, b->restitution);
-            double impulseScalar = -(1.0 + e) * velAlongNormal;
-            impulseScalar /= (1.0 / a->mass + 1.0 / b->mass);
-
-            Vector3 impulse = normal * impulseScalar;
-
-            if (!a->isStatic) a->velocity = a->velocity + impulse * (1.0 / a->mass);
-            if (!b->isStatic) b->velocity = b->velocity - impulse * (1.0 / b->mass);
+    // Phase 1: Insert all dynamic bodies into spatial hash (serial)
+    for (auto& body : bodies) {
+        if (!body->isStatic) {
+            spatialHash.insert(body.get());
         }
+    }
+
+    // Phase 2: Get potential collision pairs
+    auto potentialPairs = spatialHash.getPotentialPairs();
+
+    // Phase 3: Resolve collisions in parallel using OpenMP
+    #pragma omp parallel for schedule(dynamic)
+    for (size_t i = 0; i < potentialPairs.size(); ++i) {
+        auto& pair = potentialPairs[i];
+        RigidBody* a = pair.first;
+        RigidBody* b = pair.second;
+
+        if (a->isStatic && b->isStatic) continue;
+
+        Vector3 delta = a->position - b->position;
+        double distSq = delta.dot(delta);
+        double minDist = a->radius + b->radius;
+
+        if (distSq >= minDist * minDist || distSq < 1e-12) continue;
+
+        double dist = std::sqrt(distSq);
+        Vector3 normal = delta * (1.0 / dist);
+
+        // Position correction
+        double overlap = minDist - dist;
+        Vector3 correction = normal * (overlap * 0.5);
+
+        if (!a->isStatic) a->position = a->position + correction;
+        if (!b->isStatic) b->position = b->position - correction;
+
+        // Velocity resolution
+        Vector3 relVel = a->velocity - b->velocity;
+        double velAlongNormal = relVel.dot(normal);
+
+        if (velAlongNormal > 0) continue; // separating
+
+        double e = std::min(a->restitution, b->restitution);
+        double j = -(1.0 + e) * velAlongNormal;
+        j /= (1.0 / a->mass + 1.0 / b->mass);
+
+        Vector3 impulse = normal * j;
+
+        if (!a->isStatic) a->velocity = a->velocity + impulse * (1.0 / a->mass);
+        if (!b->isStatic) b->velocity = b->velocity - impulse * (1.0 / b->mass);
     }
 }
