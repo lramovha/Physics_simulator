@@ -7,6 +7,10 @@ void PhysicsWorld::addBody(std::unique_ptr<RigidBody> body) {
     bodies.push_back(std::move(body));
 }
 
+void PhysicsWorld::setGravity(double g) {
+    gravity = g;
+}
+
 void PhysicsWorld::step() {
     /* 1. Clear accumulated forces from last tick */
     for (auto& body : bodies) {
@@ -16,7 +20,7 @@ void PhysicsWorld::step() {
     /* 2. Apply gravity to every non-static body */
     for (auto& body : bodies) {
         if (!body->isStatic) {
-            body->applyForce(Vector3(0, -9.81 * body->mass, 0));
+            body->applyForce(Vector3(0, -gravity * body->mass, 0));
 
             // Air resistance (damping)
             Vector3 drag = body->velocity * -0.1;   // ← Adjustable damping

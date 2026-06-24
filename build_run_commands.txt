@@ -1,4 +1,12 @@
-cd /c/Users/lasyr/Desktop/ZaLes/School/2026/programming_projects/Physics_simulator
+# new build command
+cd ../../c/Users/lasyr/Desktop/ZaLes/School/2026/programming_projects/advanced_projects/Physics_simulator
+
+chmod +x build_and_run.sh
+./build_and_run.sh
+
+
+# old build command and paths
+cd ../../c/Users/lasyr/Desktop/ZaLes/School/2026/programming_projects/advanced_projects/Physics_simulator
 
 rm -rf build
 

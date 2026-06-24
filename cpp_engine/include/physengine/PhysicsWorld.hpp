@@ -31,6 +31,9 @@ public:
     std::vector<std::unique_ptr<RigidBody>> bodies;
     double      time   = 0.0;
     double      dt     = 0.016;
+    // NEW: Controllable global gravity
+    double gravity = 9.81;
+
     WorldBounds bounds;             // boundary box (off by default)
 
     PhysicsWorld() = default;
@@ -45,6 +48,9 @@ public:
 
     void clear();
     void printStatus() const;
+
+    // NEW: Setter for Java UI
+    void setGravity(double g);
 
 private:
     /* Reflect any body that has crossed the world boundary */
