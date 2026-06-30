@@ -204,7 +204,6 @@ Java_com_physics_sim_nativebridge_NativePhysicsWorld_addRandomBall
 }
 
 // Set gravity slider
-// Add near the other JNI functions
 JNIEXPORT void JNICALL
 Java_com_physics_sim_nativebridge_NativePhysicsWorld_setGravity
 (JNIEnv* /*env*/, jobject /*obj*/, jdouble gravity)
