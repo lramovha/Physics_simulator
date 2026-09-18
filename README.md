@@ -110,3 +110,7 @@ Actively developed as a personal project to deepen understanding of numerical me
 ## Author
 
 Lasy Ramovha — [GitHub](https://github.com/lramovha) · [Portfolio](https://lasyramovha-portfolio-web.netlify.app)
+
+<img width="1207" height="926" alt="Screenshot 2026-09-09 144256" src="https://github.com/user-attachments/assets/dd54c204-9ba6-4502-9941-3948192afafb" />
+<img width="1917" height="1017" alt="Screenshot 2026-09-16 113308" src="https://github.com/user-attachments/assets/bd5794d8-e059-4721-80ec-7d471de9394e" />
+
