@@ -113,21 +113,21 @@ The project includes an automated build script that handles the complete build a
 
 The script performs the following operations:
 
-Cleans previous build files.
+1. Cleans previous build files.
 
-Configures the native project using CMake and MinGW Makefiles.
+2. Configures the native project using CMake and MinGW Makefiles.
 
-Compiles the C mathematics library, C++ physics engine, and JNI bridge.
+3. Compiles the C mathematics library, C++ physics engine, and JNI bridge.
 
-Runs the native test executables.
+4. Runs the native test executables.
 
-Executes the native demonstration program.
+5. Executes the native demonstration program.
 
-Compiles all Java application sources.
+6. Compiles all Java application sources.
 
-Copies JavaFX CSS resources into the compiled application.
+7. Copies JavaFX CSS resources into the compiled application.
 
-Launches the JavaFX Physics Simulator.
+8. Launches the JavaFX Physics Simulator.
 
 From the project root, execute:
 
