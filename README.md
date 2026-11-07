@@ -72,15 +72,16 @@ Handles rendering, controls, animation, and user interaction.
 
 ## Technology
 
-* **C11**
-* **C++17**
-* **Java 17**
-* **JavaFX 21**
-* **JNI**
-* **CMake**
-* **Gradle**
-* **Catch2**
-* **JUnit**
+* **C11** – Custom mathematics library and numerical methods
+* **C++17** – Physics engine and native simulation systems
+* **Java 26** – Desktop application and JNI integration
+* **JavaFX 26.0.1** – Graphical interface and real-time visualization
+* **JNI** – Java-to-C++ native communication
+* **CMake** – Native build configuration
+* **MinGW-w64 (UCRT64)** – C/C++ compilation toolchain
+* **GCC / G++** – Native compilers
+* **Catch2** – C/C++ testing
+* **JUnit** – Java testing
 
 ---
 
@@ -99,40 +100,86 @@ tests/        C and C++/Java tests
 
 ### Requirements
 
+* Windows 10/11
+* MSYS2 with the UCRT64 environment
 * CMake 3.16+
-* GCC/MinGW or another C/C++ compiler
-* JDK 17+
-* JavaFX 21
+* MinGW-w64 GCC/G++ toolchain
+* JDK 26.0.1
+* JavaFX SDK 26.0.1
 
-### Build the native engine
+### Full Build and Run (Recommended)
 
-```bash
-cmake -B build -S .
-cmake --build build --config Release -j4
-```
+The project includes an automated build script that handles the complete build and launch process.
 
-### Run tests
+The script performs the following operations:
 
-```bash
-./build/bin/test_physmath
-./build/bin/physengine_test
-```
+Cleans previous build files.
 
-### Run the JavaFX application
+Configures the native project using CMake and MinGW Makefiles.
 
-**Recommended (full build + launch):**
+Compiles the C mathematics library, C++ physics engine, and JNI bridge.
+
+Runs the native test executables.
+
+Executes the native demonstration program.
+
+Compiles all Java application sources.
+
+Copies JavaFX CSS resources into the compiled application.
+
+Launches the JavaFX Physics Simulator.
+
+From the project root, execute:
 
 ```bash
 chmod +x build_and_run.sh
 ./build_and_run.sh
 ```
 
-On Windows:
+### Build Configuration
+
+The native engine is compiled using:
+
+MinGW Makefiles
+
+UCRT64 GCC and G++
+
+Release configuration
+
+Parallel compilation (-j4)
+
+
+### Native Tests
+
+The build script executes the following native test programs:
 
 ```bash
-cd java_app
-gradlew.bat run
+./build/bin/test_physmath
+./build/bin/physengine_test
 ```
+
+It also launches the native demonstration executable:
+
+```bash
+./build/bin/main_demo
+```
+
+### JavaFX Application
+
+The Java application is compiled directly using javac, with the JavaFX modules:
+
+```bash
+javafx.controls
+javafx.graphics
+```
+
+The application is launched through:
+
+```bash
+com.physics.sim.MainApp
+```
+
+The native library path is configured to load the compiled C++ engine through JNI.
 
 ---
 
@@ -156,9 +203,13 @@ gradlew.bat run
 
 ## Status
 
-**Actively developed.**
+**Actively developed – Physics Simulator Pro v2.0.**
 
-Future improvements include more advanced collision detection, additional numerical integrators, improved physics systems, and eventually 3D simulation and rendering.
+The project currently includes a custom C mathematics library, a C++ physics engine, a generic RK4 solver, JNI integration, and a JavaFX desktop application.
+
+The build process is automated through a dedicated Bash script that configures, compiles, tests, and launches the complete application.
+
+Future improvements include more advanced collision detection, additional numerical integration methods, enhanced physics systems, and eventually 3D simulation and rendering.
 
 ---
 
