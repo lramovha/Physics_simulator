@@ -120,14 +120,17 @@ cmake --build build --config Release -j4
 
 ### Run the JavaFX application
 
+**Recommended (full build + launch):**
+
 ```bash
-cd java_app
-./gradlew run
+chmod +x build_and_run.sh
+./build_and_run.sh
 ```
 
 On Windows:
 
 ```bash
+cd java_app
 gradlew.bat run
 ```
 
