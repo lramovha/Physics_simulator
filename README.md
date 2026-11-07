@@ -101,7 +101,7 @@ tests/        C and C++/Java tests
 ### Requirements
 
 * Windows 10/11
-* MSYS2 with the UCRT64 environment
+* [MSYS2](https://www.msys2.org/) with the UCRT64 environment
 * CMake 3.16+
 * MinGW-w64 GCC/G++ toolchain
 * JDK 26.0.1
@@ -114,19 +114,12 @@ The project includes an automated build script that handles the complete build a
 The script performs the following operations:
 
 1. Cleans previous build files.
-
 2. Configures the native project using CMake and MinGW Makefiles.
-
 3. Compiles the C mathematics library, C++ physics engine, and JNI bridge.
-
 4. Runs the native test executables.
-
 5. Executes the native demonstration program.
-
 6. Compiles all Java application sources.
-
 7. Copies JavaFX CSS resources into the compiled application.
-
 8. Launches the JavaFX Physics Simulator.
 
 From the project root, execute:
@@ -140,14 +133,10 @@ chmod +x build_and_run.sh
 
 The native engine is compiled using:
 
-MinGW Makefiles
-
-UCRT64 GCC and G++
-
-Release configuration
-
-Parallel compilation (-j4)
-
+* MinGW Makefiles
+* UCRT64 GCC and G++
+* Release configuration
+* Parallel compilation (`-j4`)
 
 ### Native Tests
 
@@ -166,7 +155,7 @@ It also launches the native demonstration executable:
 
 ### JavaFX Application
 
-The Java application is compiled directly using javac, with the JavaFX modules:
+The Java application is compiled directly using `javac`, with the JavaFX modules:
 
 ```bash
 javafx.controls
