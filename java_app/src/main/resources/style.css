@@ -1,0 +1,257 @@
+/* ═══════════════════════════════════════════════════════════════
+   Physics Simulator Pro — Modern Dark Theme
+   ═══════════════════════════════════════════════════════════════ */
+
+.root {
+    -fx-background-color: #181A1F;
+    -fx-font-family: "Segoe UI", "Inter", "Roboto", system-ui, sans-serif;
+    -fx-font-size: 13px;
+    -fx-text-fill: #F8FAFC;
+}
+
+/* ── Header ─────────────────────────────────────────────────── */
+.header-bar {
+    -fx-background-color: #20242B;
+    -fx-padding: 10 16 10 16;
+    -fx-border-color: transparent transparent #2B313A transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 12;
+}
+
+.header-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #F8FAFC;
+}
+
+.header-version {
+    -fx-font-size: 11px;
+    -fx-text-fill: #94A3B8;
+}
+
+/* ── Sidebar ────────────────────────────────────────────────── */
+.sidebar {
+    -fx-background-color: #20242B;
+    -fx-padding: 12 10 12 10;
+    -fx-spacing: 8;
+    -fx-pref-width: 230;
+    -fx-min-width: 200;
+    -fx-max-width: 280;
+    -fx-border-color: transparent #2B313A transparent transparent;
+    -fx-border-width: 0 1 0 0;
+}
+
+.sidebar-section {
+    -fx-background-color: #2B313A;
+    -fx-background-radius: 8;
+    -fx-padding: 10 12 10 12;
+    -fx-spacing: 6;
+}
+
+.sidebar-section-title {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #94A3B8;
+    -fx-padding: 0 0 4 0;
+}
+
+/* ── Buttons ────────────────────────────────────────────────── */
+.btn {
+    -fx-background-radius: 6;
+    -fx-padding: 7 12 7 12;
+    -fx-cursor: hand;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #F8FAFC;
+    -fx-background-insets: 0;
+    -fx-border-width: 0;
+}
+
+.btn-primary {
+    -fx-background-color: #3B82F6;
+}
+.btn-primary:hover {
+    -fx-background-color: #2563EB;
+}
+.btn-primary:pressed {
+    -fx-background-color: #1D4ED8;
+}
+
+.btn-success {
+    -fx-background-color: #10B981;
+}
+.btn-success:hover {
+    -fx-background-color: #059669;
+}
+
+.btn-warning {
+    -fx-background-color: #F59E0B;
+}
+.btn-warning:hover {
+    -fx-background-color: #D97706;
+}
+
+.btn-danger {
+    -fx-background-color: #EF4444;
+}
+.btn-danger:hover {
+    -fx-background-color: #DC2626;
+}
+
+.btn-ghost {
+    -fx-background-color: transparent;
+    -fx-text-fill: #94A3B8;
+    -fx-border-color: #3B4450;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+}
+.btn-ghost:hover {
+    -fx-background-color: #2B313A;
+    -fx-text-fill: #F8FAFC;
+    -fx-border-color: #4B5563;
+}
+
+.btn-scene {
+    -fx-background-color: transparent;
+    -fx-text-fill: #CBD5E1;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 6 10 6 10;
+    -fx-background-radius: 6;
+    -fx-font-weight: normal;
+}
+.btn-scene:hover {
+    -fx-background-color: #343B46;
+}
+.btn-scene:selected, .btn-scene.active {
+    -fx-background-color: #3B82F6;
+    -fx-text-fill: white;
+    -fx-font-weight: 600;
+}
+
+/* ── Checkboxes ─────────────────────────────────────────────── */
+.check-box {
+    -fx-text-fill: #CBD5E1;
+}
+.check-box .box {
+    -fx-background-color: #2B313A;
+    -fx-border-color: #4B5563;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+}
+.check-box:selected .box {
+    -fx-background-color: #3B82F6;
+    -fx-border-color: #3B82F6;
+}
+.check-box:selected .mark {
+    -fx-background-color: white;
+}
+
+/* ── Sliders ────────────────────────────────────────────────── */
+.slider .track {
+    -fx-background-color: #3B4450;
+    -fx-background-radius: 3;
+    -fx-pref-height: 6;
+}
+.slider .thumb {
+    -fx-background-color: #3B82F6;
+    -fx-background-radius: 8;
+    -fx-pref-width: 14;
+    -fx-pref-height: 14;
+}
+.slider .thumb:hover {
+    -fx-background-color: #60A5FA;
+}
+.slider .axis {
+    -fx-tick-label-fill: #64748B;
+}
+
+/* ── Labels ─────────────────────────────────────────────────── */
+.label-muted {
+    -fx-text-fill: #94A3B8;
+    -fx-font-size: 11px;
+}
+.label-value {
+    -fx-text-fill: #F8FAFC;
+    -fx-font-weight: 600;
+    -fx-font-size: 12px;
+}
+
+/* ── Stats Panel ────────────────────────────────────────────── */
+.stats-panel {
+    -fx-background-color: #20242B;
+    -fx-padding: 8 16 8 16;
+    -fx-spacing: 0;
+    -fx-border-color: #2B313A transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.stat-card {
+    -fx-background-color: #2B313A;
+    -fx-background-radius: 6;
+    -fx-padding: 6 12 6 12;
+    -fx-spacing: 2;
+    -fx-min-width: 90;
+    -fx-alignment: CENTER;
+}
+
+.stat-label {
+    -fx-font-size: 10px;
+    -fx-text-fill: #94A3B8;
+    -fx-font-weight: 500;
+}
+
+.stat-value {
+    -fx-font-size: 13px;
+    -fx-text-fill: #F8FAFC;
+    -fx-font-weight: bold;
+}
+
+.stat-value.accent {
+    -fx-text-fill: #3B82F6;
+}
+.stat-value.success {
+    -fx-text-fill: #10B981;
+}
+.stat-value.warning {
+    -fx-text-fill: #F59E0B;
+}
+
+/* ── Simulation area ────────────────────────────────────────── */
+.simulation-view {
+    -fx-background-color: #181A1F;
+}
+
+/* ── ScrollPane ─────────────────────────────────────────────── */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+.scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: #3B4450;
+    -fx-background-radius: 4;
+}
+
+/* ── ComboBox (fallback) ────────────────────────────────────── */
+.combo-box {
+    -fx-background-color: #2B313A;
+    -fx-background-radius: 6;
+    -fx-text-fill: #F8FAFC;
+}
+.combo-box .list-cell {
+    -fx-text-fill: #F8FAFC;
+    -fx-background-color: #2B313A;
+}
+.combo-box-popup .list-view {
+    -fx-background-color: #2B313A;
+}
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: #3B82F6;
+}

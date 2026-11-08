@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "===================================================="
-echo "   Physics Simulator - Full Build & Run (MSYS2 UCRT64)"
+echo "   Physics Simulator Pro v2.0 - Full Build & Run"
 echo "===================================================="
 echo
 
@@ -42,27 +42,41 @@ echo "→ physengine_test"
 echo "→ main_demo"
 ./build/bin/main_demo
 
-echo "[5/6] Building JavaFX GUI..."
+echo "[5/6] Building JavaFX GUI (v2.0)..."
 cd java_app || exit
 
 rm -rf build/classes 2>/dev/null
+mkdir -p build/classes
 
+# Compile ALL Java sources (including the new ui package)
 "/c/Program Files/Java/jdk-26.0.1/bin/javac.exe" \
   --module-path javafx-sdk-26.0.1/lib \
   --add-modules javafx.controls,javafx.graphics \
   -d build/classes \
   src/main/java/com/physics/sim/*.java \
-  src/main/java/com/physics/sim/nativebridge/*.java
+  src/main/java/com/physics/sim/nativebridge/*.java \
+  src/main/java/com/physics/sim/ui/*.java
 
-echo "[6/6] Launching JavaFX Application..."
+if [ $? -ne 0 ]; then
+    echo "Java compilation failed!"
+    read -p "Press Enter to exit..."
+    exit 1
+fi
+
+# Copy CSS resource onto the classpath (so getResource("/style.css") works)
+mkdir -p build/classes
+cp -f src/main/resources/style.css build/classes/style.css
+
+echo "[6/6] Launching Physics Simulator Pro..."
 "/c/Program Files/Java/jdk-26.0.1/bin/java.exe" \
   --module-path javafx-sdk-26.0.1/lib \
   --add-modules javafx.controls,javafx.graphics \
   -Djava.library.path=../build/lib \
-  -cp build/classes com.physics.sim.MainApp
+  -cp build/classes \
+  com.physics.sim.MainApp
 
 echo
 echo "===================================================="
-echo "✅ Build and Run completed!"
+echo "Build and Run completed!"
 echo "===================================================="
 read -p "Press Enter to close..."

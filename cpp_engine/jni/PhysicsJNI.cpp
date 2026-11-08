@@ -213,5 +213,138 @@ Java_com_physics_sim_nativebridge_NativePhysicsWorld_setGravity
     }
 }
 
+/* ── setAirResistance ─────────────────────────────────────────── */
+JNIEXPORT void JNICALL
+Java_com_physics_sim_nativebridge_NativePhysicsWorld_setAirResistance
+(JNIEnv* /*env*/, jobject /*obj*/, jdouble k)
+{
+    if (currentScene) {
+        currentScene->world.setAirResistance(k);
+    }
+}
+
+/* ── setElasticity ────────────────────────────────────────────── */
+JNIEXPORT void JNICALL
+Java_com_physics_sim_nativebridge_NativePhysicsWorld_setElasticity
+(JNIEnv* /*env*/, jobject /*obj*/, jdouble e)
+{
+    if (currentScene) {
+        currentScene->world.setElasticity(e);
+    }
+}
+
+/* ── setFriction ──────────────────────────────────────────────── */
+JNIEXPORT void JNICALL
+Java_com_physics_sim_nativebridge_NativePhysicsWorld_setFriction
+(JNIEnv* /*env*/, jobject /*obj*/, jdouble f)
+{
+    if (currentScene) {
+        currentScene->world.setFriction(f);
+    }
+}
+
+/* ── getKineticEnergy ─────────────────────────────────────────── */
+JNIEXPORT jdouble JNICALL
+Java_com_physics_sim_nativebridge_NativePhysicsWorld_getKineticEnergy
+(JNIEnv* /*env*/, jobject /*obj*/)
+{
+    if (!currentScene) return 0.0;
+    return currentScene->world.getKineticEnergy();
+}
+
+/* ── getPotentialEnergy ───────────────────────────────────────── */
+JNIEXPORT jdouble JNICALL
+Java_com_physics_sim_nativebridge_NativePhysicsWorld_getPotentialEnergy
+(JNIEnv* /*env*/, jobject /*obj*/)
+{
+    if (!currentScene) return 0.0;
+    return currentScene->world.getPotentialEnergy();
+}
+
+/* ── getTotalEnergy ───────────────────────────────────────────── */
+JNIEXPORT jdouble JNICALL
+Java_com_physics_sim_nativebridge_NativePhysicsWorld_getTotalEnergy
+(JNIEnv* /*env*/, jobject /*obj*/)
+{
+    if (!currentScene) return 0.0;
+    return currentScene->world.getTotalEnergy();
+}
+
+/* ── getCollisionCount ────────────────────────────────────────── */
+JNIEXPORT jint JNICALL
+Java_com_physics_sim_nativebridge_NativePhysicsWorld_getCollisionCount
+(JNIEnv* /*env*/, jobject /*obj*/)
+{
+    if (!currentScene) return 0;
+    return static_cast<jint>(currentScene->world.collisionCount);
+}
+
+/* ── getBodyVelocities ──────────────────────────────────────────
+ * Flat array: [vx0, vy0, vz0,  vx1, vy1, vz1, ...]
+ * Needed for velocity-vector rendering (Phase C)
+ * ─────────────────────────────────────────────────────────────── */
+JNIEXPORT jdoubleArray JNICALL
+Java_com_physics_sim_nativebridge_NativePhysicsWorld_getBodyVelocities
+(JNIEnv* env, jobject /*obj*/)
+{
+    if (!currentScene) return nullptr;
+
+    int count = static_cast<int>(currentScene->world.bodies.size());
+    jdoubleArray result = env->NewDoubleArray(count * 3);
+    if (!result) return nullptr;
+
+    jdouble* data = env->GetDoubleArrayElements(result, nullptr);
+    for (int i = 0; i < count; i++) {
+        const auto& body = currentScene->world.bodies[i];
+        data[i * 3]     = body->velocity.x();
+        data[i * 3 + 1] = body->velocity.y();
+        data[i * 3 + 2] = body->velocity.z();
+    }
+    env->ReleaseDoubleArrayElements(result, data, 0);
+    return result;
+}
+
+/* ── getBodyState ───────────────────────────────────────────────
+ * Returns detailed state for one body (used by Object Inspector).
+ * Layout (12 doubles):
+ *   [0] mass
+ *   [1] radius
+ *   [2] restitution
+ *   [3] isStatic (1.0 or 0.0)
+ *   [4] posX  [5] posY  [6] posZ
+ *   [7] velX  [8] velY  [9] velZ
+ *   [10] speed
+ *   [11] kineticEnergy
+ * Returns null / empty if index is invalid.
+ * ─────────────────────────────────────────────────────────────── */
+JNIEXPORT jdoubleArray JNICALL
+Java_com_physics_sim_nativebridge_NativePhysicsWorld_getBodyState
+(JNIEnv* env, jobject /*obj*/, jint index)
+{
+    if (!currentScene) return nullptr;
+    int count = static_cast<int>(currentScene->world.bodies.size());
+    if (index < 0 || index >= count) return nullptr;
+
+    const auto& body = currentScene->world.bodies[index];
+    double speed = body->velocity.magnitude();
+    double ke    = 0.5 * body->mass * speed * speed;
+
+    jdoubleArray result = env->NewDoubleArray(12);
+    if (!result) return nullptr;
+
+    jdouble data[12] = {
+        body->mass,
+        body->radius,
+        body->restitution,
+        body->isStatic ? 1.0 : 0.0,
+        body->position.x(), body->position.y(), body->position.z(),
+        body->velocity.x(), body->velocity.y(), body->velocity.z(),
+        speed,
+        ke
+    };
+    env->SetDoubleArrayRegion(result, 0, 12, data);
+    return result;
+}
+
 } /* extern "C" */
 
